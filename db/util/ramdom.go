@@ -9,7 +9,7 @@ import (
 const alphabet = "qwertyuiopasdfghjklzxcvbnm"
 
 func init() {
-	rand.Seed(time.Now().UnixNano())
+	rand.Intn(int(time.Now().UnixNano()))
 }
 
 // ramdomInt generates a ramdom between min and max
