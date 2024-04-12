@@ -20,7 +20,7 @@ jobs:
           env:
             POSTGES_USER: root
             POSTGRES_PASSWORD: secret
-            POSTGRES_DB: root
+            POSTGRES_DB: simple_bank
           options: >-
             --health-cmd pg_isready
             --health-interval 10s
