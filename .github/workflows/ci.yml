@@ -42,7 +42,7 @@ jobs:
       - name: Install golang-migrate
         run:
             curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz
-            sudo mv migrate.linux-amd64 /urc/bin/
+            sudo mv migrate.linux-amd64 \\wsl.localhost\docker-desktop\usr\bin\migrate
             which migrate
       - name: Test
         run: make test
