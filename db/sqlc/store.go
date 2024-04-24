@@ -6,19 +6,25 @@ import (
 	"fmt"
 )
 
-type Store struct {
+// trong day can co tat ca chuc nang cuar queries va chuc nang Transfer
+type Store interface {
+	Querier //lam cho store cos tat ca chuc nang
+	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
+}
+
+type SQLStore struct {
 	*Queries
 	db *sql.DB //dai dien cho database
 }
 
-func NewStore(db *sql.DB) *Store {
-	return &Store{
+func NewStore(db *sql.DB) Store {
+	return &SQLStore{
 		db:      db,
 		Queries: New(db),
 	}
 }
 
-func (store *Store) execTx(ctx context.Context, fn func(*Queries) error) error {
+func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
 	tx, err := store.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
@@ -52,7 +58,7 @@ type TransferTxResult struct {
 }
 
 // it crates a transfer record, add account entries and update accounts balance within a single database transaction
-func (store *Store) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
+func (store *SQLStore) TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error) {
 	var result TransferTxResult
 
 	err := store.execTx(ctx, func(q *Queries) error {
@@ -116,3 +122,15 @@ func addMoney(
 	})
 	return
 }
+
+//type SQLStore struct {
+//	connPool *pgxpool.Pool
+//	*Queries
+//}
+//
+//func NewStore(connPool *pgxpool.Pool) Store {
+//	return &SQLStore{
+//		connPool: connPool,
+//		Queries:  New(connPool),
+//	}
+//}
