@@ -1,7 +1,7 @@
 # This workflow will build a golang project
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
 
-name: ci-test
+name: Run unit test 
 
 on:
   push:
@@ -37,12 +37,18 @@ jobs:
         with:
           go-version: '1.22.2'
 
-
       - name: Install golang-migrate
         run: |
-            curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz
-            sudo mv migrate.linux-amd64 /usr/bin/migrate
-            which migrate
+            curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.windows-amd64.tar.gz -o migrate.tar.gz
+            tar -xzf migrate.tar.gz
+            move migrate.exe C:\Users\Quyen\migrate\migrate.exe
+            del migrate.tar.gz
+            where migrate.exe
+      # - name: Install golang-migrate
+      #   run: |
+      #       curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz
+      #       sudo mv migrate.linux-amd64 /usr/bin/migrate
+      #       which migrate
 
       - name: Run migrations
         run: make migrateup
