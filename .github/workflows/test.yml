@@ -39,12 +39,12 @@ jobs:
     #fix
       - name: Install golang-migrate
         run: |
-            curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz
-            sudo mv migrate.linux-amd64 \\wsl.localhost\docker-desktop-data\usr\migrate
+            curl -L https://github.com/golang-migrate/migrate/releases/download/$version/migrate.$os-$arch.tar.gz | tar xvz
+            sudo mv migrate.linux-amd64 /usr/bin/migrate
             which migrate
 
       - name: Run migrations
-        run: make migrateup
+        run: make migrateup 
 
       - name: Test
         run: make test
