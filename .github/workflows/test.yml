@@ -36,17 +36,12 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: '1.22.2'
+    
       - name: Install golang-migrate
         run: |
-            curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64 -o migrate.exe
-            move migrate.exe C:\Users\Quyen\migrate\migrate.exe
-            where migrate.exe
-    
-      # - name: Install golang-migrate
-      #   run: |
-      #       curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz
-      #       sudo mv migrate.linux-amd64 /usr/bin/migrate
-      #       which migrate
+            curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz
+            sudo mv migrate.linux-amd64 \\wsl.localhost\docker-desktop\usr\bin\migrate
+            which migrate
 
       - name: Run migrations
         run: make migrateup
