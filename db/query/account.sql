@@ -12,7 +12,7 @@ SELECT * FROM accounts
 WHERE id = $1 LIMIT 1;
 
 -- name: GetAccountForUpdate :one
-SELECT * FROM counts
+SELECT * FROM accounts
 WHERE id = $1 LIMIT 1
 FOR NO KEY UPDATE
 ;

@@ -2,12 +2,13 @@ package api
 
 import (
 	"database/sql"
+	"net/http"
+	"time"
+
 	db "github.com/Quyen-2211/simplebank/db/sqlc"
 	"github.com/Quyen-2211/simplebank/db/util"
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
-	"net/http"
-	"time"
 )
 
 type createUserRequest struct {
@@ -21,8 +22,8 @@ type userResponse struct {
 	Username         string    `json:"username"`
 	Fullname         string    `json:"fullname"`
 	Email            string    `json:"email"`
-	PasswordChangeAt time.Time `json:"password_Change_At"`
-	CreateAt         time.Time `json:"createAt"`
+	PasswordChangeAt time.Time `json:"password_change_at"`
+	CreateAt         time.Time `json:"created_at"`
 }
 
 func newUserResponse(user db.User) userResponse {

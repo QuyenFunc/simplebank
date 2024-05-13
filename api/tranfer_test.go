@@ -21,9 +21,9 @@ import (
 func TestTransferAPI(t *testing.T) {
 	amount := int64(10)
 
-	user1, _ := randomUser(t)
-	user2, _ := randomUser(t)
-	user3, _ := randomUser(t)
+	user1, _ := createRandomUser(t)
+	user2, _ := createRandomUser(t)
+	user3, _ := createRandomUser(t)
 
 	account1 := randomAccount(user1.Username)
 	account2 := randomAccount(user2.Username)
@@ -271,16 +271,17 @@ func TestTransferAPI(t *testing.T) {
 			defer ctrl.Finish()
 
 			store := mockdb.NewMockStore(ctrl)
+			//build stubs
 			tc.buildStubs(store)
 
 			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			// Marshal body data to JSON
+			url := "/transfers"
 			data, err := json.Marshal(tc.body)
 			require.NoError(t, err)
 
-			url := "/transfers"
 			request, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
 			require.NoError(t, err)
 

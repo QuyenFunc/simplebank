@@ -5,14 +5,15 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	mockdb "github.com/Quyen-2211/simplebank/db/mock"
-	db "github.com/Quyen-2211/simplebank/db/sqlc"
-	"github.com/Quyen-2211/simplebank/db/util"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
 	"testing"
+
+	mockdb "github.com/Quyen-2211/simplebank/db/mock"
+	db "github.com/Quyen-2211/simplebank/db/sqlc"
+	"github.com/Quyen-2211/simplebank/db/util"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
@@ -48,7 +49,7 @@ func EqCreateUserParams(arg db.CreateUserParams, password string) gomock.Matcher
 }
 
 func TestCreateUserAPI(t *testing.T) {
-	user, password := randomUser(t)
+	user, password := createRandomUser(t)
 
 	testCases := []struct {
 		name          string
@@ -70,6 +71,7 @@ func TestCreateUserAPI(t *testing.T) {
 					FullName: user.FullName,
 					Email:    user.Email,
 				}
+				//user custom matcher to check password
 				store.EXPECT().
 					CreateUser(gomock.Any(), EqCreateUserParams(arg, password)).
 					Times(1).
@@ -119,7 +121,7 @@ func TestCreateUserAPI(t *testing.T) {
 		{
 			name: "InvalidUsername",
 			body: gin.H{
-				"username":  "invalid-user#1",
+				"username":  "invalid-username",
 				"password":  password,
 				"full_name": user.FullName,
 				"email":     user.Email,
@@ -154,7 +156,7 @@ func TestCreateUserAPI(t *testing.T) {
 			name: "TooShortPassword",
 			body: gin.H{
 				"username":  user.Username,
-				"password":  "123",
+				"password":  "123", //be hon 6 ky tu
 				"full_name": user.FullName,
 				"email":     user.Email,
 			},
@@ -197,7 +199,7 @@ func TestCreateUserAPI(t *testing.T) {
 }
 
 func TestLoginUserAPI(t *testing.T) {
-	user, password := randomUser(t)
+	user, password := createRandomUser(t)
 
 	testCases := []struct {
 		name          string
@@ -316,7 +318,7 @@ func TestLoginUserAPI(t *testing.T) {
 	}
 }
 
-func randomUser(t *testing.T) (user db.User, password string) {
+func createRandomUser(t *testing.T) (user db.User, password string) {
 	password = util.RandomString(6)
 	hashedPassword, err := util.HashPassword(password)
 	require.NoError(t, err)
